@@ -32,10 +32,10 @@ class AppServiceProvider extends ServiceProvider
         Config::set('cors.allowed_headers', ['*']);
         Config::set('cors.supports_credentials', false);
 
-        // API rate limiter: 100 req/min per user or IP
+        // API rate limiter: 60 req/min per user or IP
         RateLimiter::for('api', function ($request) {
             $userId = optional($request->user())->id ?: $request->ip();
-            return [Limit::perMinute(100)->by($userId)];
+            return [Limit::perMinute(60)->by($userId)];
         });
     }
 }
