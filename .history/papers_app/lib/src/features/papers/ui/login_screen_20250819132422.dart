@@ -133,10 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             obscureText: _obscure,
                             validator:
-                                (v) =>
-                                    (v == null || v.isEmpty)
-                                        ? 'Enter password'
-                                        : null,
+                                (v) => (v == null || v.isEmpty) ? 'Enter password' : null,
                           ),
                           const SizedBox(height: 22),
                           FilledButton(
@@ -144,82 +141,66 @@ class _LoginScreenState extends State<LoginScreen> {
                                 provider.isLoading
                                     ? null
                                     : () async {
-                                      if (!_formKey.currentState!.validate())
-                                        return;
-                                      final ok = await context
-                                          .read<PapersProvider>()
-                                          .login(
-                                            email: _emailController.text.trim(),
-                                            password: _passwordController.text,
+                                        if (!_formKey.currentState!.validate()) return;
+                                        final ok = await context
+                                            .read<PapersProvider>()
+                                            .login(
+                                              email: _emailController.text.trim(),
+                                              password: _passwordController.text,
+                                            );
+                                        if (!mounted) return;
+                                        if (ok) {
+                                          Navigator.of(context).pushReplacementNamed(
+                                            PapersListScreen.routeName,
                                           );
-                                      if (!mounted) return;
-                                      if (ok) {
-                                        Navigator.of(
-                                          context,
-                                        ).pushReplacementNamed(
-                                          PapersListScreen.routeName,
-                                        );
-                                      } else {
-                                        final msg =
-                                            context
-                                                .read<PapersProvider>()
-                                                .errorMessage ??
-                                            'Login failed';
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(content: Text(msg)),
-                                        );
-                                      }
-                                    },
+                                        } else {
+                                          final msg = context
+                                                  .read<PapersProvider>()
+                                                  .errorMessage ??
+                                              'Login failed';
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(content: Text(msg)),
+                                          );
+                                        }
+                                      },
                             style: FilledButton.styleFrom(
                               minimumSize: const Size.fromHeight(50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            child:
-                                provider.isLoading
-                                    ? const SizedBox(
-                                      height: 22,
-                                      width: 22,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2.2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              Colors.white,
-                                            ),
+                            child: provider.isLoading
+                                ? const SizedBox(
+                                    height: 22,
+                                    width: 22,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
                                       ),
-                                    )
-                                    : const Text('Sign in'),
+                                    ),
+                                  )
+                                : const Text('Sign in'),
                           ),
                           const SizedBox(height: 12),
                           TextButton(
-                            onPressed:
-                                provider.isLoading
-                                    ? null
-                                    : () async {
-                                      final created =
-                                          await showModalBottomSheet<bool>(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.vertical(
-                                                    top: Radius.circular(16),
-                                                  ),
-                                            ),
-                                            builder:
-                                                (ctx) => const _RegisterSheet(),
-                                          );
-                                      if (created == true && mounted) {
-                                        Navigator.of(
-                                          context,
-                                        ).pushReplacementNamed(
-                                          PapersListScreen.routeName,
-                                        );
-                                      }
-                                    },
+                            onPressed: provider.isLoading
+                                ? null
+                                : () async {
+                                    final created = await showModalBottomSheet<bool>(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                                      ),
+                                      builder: (ctx) => const _RegisterSheet(),
+                                    );
+                                    if (created == true && mounted) {
+                                      Navigator.of(context).pushReplacementNamed(
+                                        PapersListScreen.routeName,
+                                      );
+                                    }
+                                  },
                             child: const Text('Create an account'),
                           ),
                         ],
@@ -272,33 +253,21 @@ class _RegisterSheetState extends State<_RegisterSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                'Create account',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text('Create account', style: Theme.of(context).textTheme.titleLarge),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _name,
-                decoration: const InputDecoration(
-                  labelText: 'Full name',
-                  prefixIcon: Icon(Icons.person_outline),
-                ),
-                validator:
-                    (v) => (v == null || v.isEmpty) ? 'Enter name' : null,
+                decoration: const InputDecoration(labelText: 'Full name', prefixIcon: Icon(Icons.person_outline)),
+                validator: (v) => (v == null || v.isEmpty) ? 'Enter name' : null,
               ),
               const SizedBox(height: 10),
               TextFormField(
                 controller: _email,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
+                decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email_outlined)),
                 keyboardType: TextInputType.emailAddress,
                 validator: (v) {
                   if (v == null || v.isEmpty) return 'Enter email';
-                  final ok = RegExp(
-                    r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                  ).hasMatch(v.trim());
+                  final ok = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v.trim());
                   return ok ? null : 'Enter a valid email';
                 },
               ),
@@ -309,53 +278,35 @@ class _RegisterSheetState extends State<_RegisterSheet> {
                   labelText: 'Password',
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscure
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                    ),
+                    icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ),
                 obscureText: _obscure,
-                validator:
-                    (v) =>
-                        (v == null || v.length < 6) ? 'Min 6 characters' : null,
+                validator: (v) => (v == null || v.length < 6) ? 'Min 6 characters' : null,
               ),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed:
-                    provider.isLoading
-                        ? null
-                        : () async {
-                          if (!_formKey.currentState!.validate()) return;
-                          final ok = await context
-                              .read<PapersProvider>()
-                              .register(
-                                name: _name.text.trim(),
-                                email: _email.text.trim(),
-                                password: _password.text,
-                              );
-                          if (!mounted) return;
-                          if (ok) {
-                            Navigator.of(context).pop(true);
-                          } else {
-                            final msg =
-                                context.read<PapersProvider>().errorMessage ??
-                                'Registration failed';
-                            ScaffoldMessenger.of(
-                              context,
-                            ).showSnackBar(SnackBar(content: Text(msg)));
-                          }
-                        },
-                child:
-                    provider.isLoading
-                        ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                        : const Text('Create account'),
+                onPressed: provider.isLoading
+                    ? null
+                    : () async {
+                        if (!_formKey.currentState!.validate()) return;
+                        final ok = await context.read<PapersProvider>().register(
+                              name: _name.text.trim(),
+                              email: _email.text.trim(),
+                              password: _password.text,
+                            );
+                        if (!mounted) return;
+                        if (ok) {
+                          Navigator.of(context).pop(true);
+                        } else {
+                          final msg = context.read<PapersProvider>().errorMessage ?? 'Registration failed';
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+                        }
+                      },
+                child: provider.isLoading
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Text('Create account'),
               ),
             ],
           ),

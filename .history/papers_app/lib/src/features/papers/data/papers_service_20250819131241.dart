@@ -88,11 +88,7 @@ class PapersService {
     }
   }
 
-  Future<String?> register({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
+  Future<String?> register({required String name, required String email, required String password}) async {
     try {
       final response = await apiClient.dio.post(
         '/register',

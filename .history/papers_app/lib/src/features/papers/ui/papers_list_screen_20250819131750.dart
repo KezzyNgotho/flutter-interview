@@ -83,10 +83,7 @@ class _PapersListScreenState extends State<PapersListScreen> {
                   await context.read<PapersProvider>().logout();
                   if (!mounted) return;
                   Navigator.of(context).pop();
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    LoginScreen.routeName,
-                    (route) => false,
-                  );
+                  Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (route) => false);
                 },
               ),
             ],
@@ -186,7 +183,7 @@ class _PapersListScreenState extends State<PapersListScreen> {
                             s is Map ? s['id']?.toString() : s.toString();
                         final name =
                             s is Map
-                                ? (s['name']?.toString() ?? (id ?? ''))
+                                ? (s['name']?.toString() ?? id)
                                 : s.toString();
                         return DropdownMenuItem<String?>(
                           value: id,

@@ -186,7 +186,7 @@ class _PapersListScreenState extends State<PapersListScreen> {
                             s is Map ? s['id']?.toString() : s.toString();
                         final name =
                             s is Map
-                                ? (s['name']?.toString() ?? (id ?? ''))
+                                ? (s['name']?.toString() ?? id)
                                 : s.toString();
                         return DropdownMenuItem<String?>(
                           value: id,

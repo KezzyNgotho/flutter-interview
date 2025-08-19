@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../papers/state/papers_provider.dart';
 import 'paper_detail_screen.dart';
-import 'login_screen.dart';
 
 class PapersListScreen extends StatefulWidget {
   const PapersListScreen({super.key});
@@ -53,8 +52,7 @@ class _PapersListScreenState extends State<PapersListScreen> {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
+                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                     child: const Icon(Icons.person, size: 24),
                   ),
                   const SizedBox(width: 12),
@@ -62,14 +60,8 @@ class _PapersListScreenState extends State<PapersListScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          user?['name']?.toString() ?? 'User',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(
-                          user?['email']?.toString() ?? '',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        Text(user?['name']?.toString() ?? 'User', style: Theme.of(context).textTheme.titleMedium),
+                        Text(user?['email']?.toString() ?? '', style: Theme.of(context).textTheme.bodySmall),
                       ],
                     ),
                   ),
@@ -83,10 +75,7 @@ class _PapersListScreenState extends State<PapersListScreen> {
                   await context.read<PapersProvider>().logout();
                   if (!mounted) return;
                   Navigator.of(context).pop();
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    LoginScreen.routeName,
-                    (route) => false,
-                  );
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                 },
               ),
             ],
@@ -156,13 +145,9 @@ class _PapersListScreenState extends State<PapersListScreen> {
                     value: provider.selectedYear,
                     hint: const Text('All years'),
                     items: <DropdownMenuItem<String?>>[
-                      const DropdownMenuItem(
-                        value: null,
-                        child: Text('All years'),
-                      ),
+                      const DropdownMenuItem(value: null, child: Text('All years')),
                       ...yearOptions.map(
-                        (y) =>
-                            DropdownMenuItem<String?>(value: y, child: Text(y)),
+                        (y) => DropdownMenuItem<String?>(value: y, child: Text(y)),
                       ),
                     ],
                     onChanged: (val) {
@@ -177,21 +162,11 @@ class _PapersListScreenState extends State<PapersListScreen> {
                     value: provider.selectedSubjectId,
                     hint: const Text('All subjects'),
                     items: <DropdownMenuItem<String?>>[
-                      const DropdownMenuItem(
-                        value: null,
-                        child: Text('All subjects'),
-                      ),
+                      const DropdownMenuItem(value: null, child: Text('All subjects')),
                       ...provider.subjects.map((s) {
-                        final id =
-                            s is Map ? s['id']?.toString() : s.toString();
-                        final name =
-                            s is Map
-                                ? (s['name']?.toString() ?? (id ?? ''))
-                                : s.toString();
-                        return DropdownMenuItem<String?>(
-                          value: id,
-                          child: Text(name),
-                        );
+                        final id = s is Map ? s['id']?.toString() : s.toString();
+                        final name = s is Map ? (s['name']?.toString() ?? id) : s.toString();
+                        return DropdownMenuItem<String?>(value: id, child: Text(name));
                       }),
                     ],
                     onChanged: (val) {
@@ -216,100 +191,90 @@ class _PapersListScreenState extends State<PapersListScreen> {
                 provider.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : RefreshIndicator(
-                      onRefresh:
-                          () => context.read<PapersProvider>().loadPapers(),
-                      child: ListView.separated(
-                        itemCount: provider.filteredPapers.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (itemContext, index) {
-                          final paper = provider.filteredPapers[index];
-                          final title = provider.getPaperTitle(paper);
-                          final id =
-                              (paper is Map)
-                                  ? (paper['id']?.toString() ?? '$index')
-                                  : '$index';
-                          final year =
-                              (paper is Map)
-                                  ? (paper['year']?.toString() ?? '')
-                                  : '';
-                          final subject =
-                              (paper is Map)
-                                  ? (paper['subject']?['name'] ?? '')
-                                  : '';
-                          final studied = provider.isStudied(id);
-                          return ListTile(
-                            leading: Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                CircleAvatar(
-                                  backgroundColor:
-                                      Theme.of(
-                                        context,
-                                      ).colorScheme.primaryContainer,
-                                  child: Text(
-                                    year.length >= 4 ? year.substring(2) : year,
-                                    style: TextStyle(
-                                      color:
-                                          Theme.of(
-                                            context,
-                                          ).colorScheme.onPrimaryContainer,
-                                      fontWeight: FontWeight.bold,
+                        onRefresh:
+                            () => context.read<PapersProvider>().loadPapers(),
+                        child: ListView.separated(
+                          itemCount: provider.filteredPapers.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (itemContext, index) {
+                            final paper = provider.filteredPapers[index];
+                            final title = provider.getPaperTitle(paper);
+                            final id =
+                                (paper is Map)
+                                    ? (paper['id']?.toString() ?? '$index')
+                                    : '$index';
+                            final year = (paper is Map)
+                                ? (paper['year']?.toString() ?? '')
+                                : '';
+                            final subject = (paper is Map)
+                                ? (paper['subject']?['name'] ?? '')
+                                : '';
+                            final studied = provider.isStudied(id);
+                            return ListTile(
+                              leading: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                    child: Text(
+                                      year.length >= 4 ? year.substring(2) : year,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                if (studied)
-                                  const Positioned(
-                                    right: -4,
-                                    bottom: -4,
-                                    child: Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 16,
+                                  if (studied)
+                                    const Positioned(
+                                      right: -4,
+                                      bottom: -4,
+                                      child: Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 16,
+                                      ),
                                     ),
-                                  ),
-                              ],
-                            ),
-                            title: Text(
-                              title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            subtitle: Text(
-                              subject,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: IconButton(
-                              tooltip:
-                                  studied
-                                      ? 'Mark as unstudied'
-                                      : 'Mark as studied',
-                              icon: Icon(
-                                studied
-                                    ? Icons.bookmark_added
-                                    : Icons.bookmark_add_outlined,
-                                color:
-                                    studied
-                                        ? Colors.green
-                                        : Theme.of(context).colorScheme.primary,
+                                ],
                               ),
-                              onPressed:
-                                  () => context
-                                      .read<PapersProvider>()
-                                      .toggleStudied(id),
-                            ),
-                            onTap: () async {
-                              await provider.loadPaperDetail(id);
-                              if (!mounted) return;
-                              Navigator.of(this.context).pushNamed(
-                                PaperDetailScreen.routeName,
-                                arguments: id,
-                              );
-                            },
-                          );
-                        },
+                              title: Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                subject,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: IconButton(
+                                tooltip:
+                                    studied ? 'Mark as unstudied' : 'Mark as studied',
+                                icon: Icon(
+                                  studied ? Icons.bookmark_added : Icons.bookmark_add_outlined,
+                                  color: studied
+                                      ? Colors.green
+                                      : Theme.of(context).colorScheme.primary,
+                                ),
+                                onPressed: () => context
+                                    .read<PapersProvider>()
+                                    .toggleStudied(id),
+                              ),
+                              onTap: () async {
+                                await provider.loadPaperDetail(id);
+                                if (!mounted) return;
+                                Navigator.of(this.context).pushNamed(
+                                  PaperDetailScreen.routeName,
+                                  arguments: id,
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
           ),
         ],
       ),

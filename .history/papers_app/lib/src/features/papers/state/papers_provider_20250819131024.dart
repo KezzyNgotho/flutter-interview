@@ -71,20 +71,6 @@ class PapersProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> register({required String name, required String email, required String password}) async {
-    _setLoading(true);
-    try {
-      final token = await service.register(name: name, email: email, password: password);
-      _setError(null);
-      return token != null;
-    } catch (e) {
-      _setError(e.toString());
-      return false;
-    } finally {
-      _setLoading(false);
-    }
-  }
-
   Future<void> loadSubjects() async {
     _setLoading(true);
     try {

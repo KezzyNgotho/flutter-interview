@@ -87,24 +87,4 @@ class PapersService {
       await authStorage.clear();
     }
   }
-
-  Future<String?> register({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
-    try {
-      final response = await apiClient.dio.post(
-        '/register',
-        data: {'name': name, 'email': email, 'password': password},
-      );
-      final token = (response.data as Map)['token'] as String?;
-      if (token != null) {
-        await authStorage.saveToken(token);
-      }
-      return token;
-    } on DioException catch (e) {
-      throw Exception(e.response?.data?['message'] ?? 'Registration failed');
-    }
-  }
 }
